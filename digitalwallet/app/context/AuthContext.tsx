@@ -10,6 +10,9 @@ interface AuthProps {
 }
 
 const TOKEN_KEY = 'my-jwt';
+const FULLNAME = 'fullname';
+const EMAIL = 'email';
+const ROLE = 'role';
 export const API_URL='http://localhost:8080';
 
 const AuthContext = createContext<AuthProps>({});
@@ -68,6 +71,9 @@ export const AuthProvider = ({ children }: any) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.token}`;
 
             await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
+            await SecureStore.setItemAsync(FULLNAME, result.data.userDto.name);
+            await SecureStore.setItemAsync(EMAIL, result.data.userDto.email);
+            await SecureStore.setItemAsync(ROLE, result.data.userDto.role);
 
             return result;
         }
@@ -78,6 +84,9 @@ export const AuthProvider = ({ children }: any) => {
 
     const logout = async () => {
         await SecureStore.deleteItemAsync(TOKEN_KEY);
+        await SecureStore.deleteItemAsync(FULLNAME);
+        await SecureStore.deleteItemAsync(EMAIL);
+        await SecureStore.deleteItemAsync(ROLE);
         axios.defaults.headers.common['Authorization'] = '';
         
         setAuthState({
