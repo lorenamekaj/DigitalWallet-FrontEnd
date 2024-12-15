@@ -4,21 +4,27 @@ import { API_URL, useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import PrimaryButton from '../ common/PrimaryButton';
 
-const Login = ({ navigation }: { navigation: any }) => {
+const Register = ({ navigation }: { navigation: any }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const { onLogin, onRegister } = useAuth();
     const [error, setError] = useState('');
 
     const validateForm = () => {
-        if (!email || !password) {
-            setError("All fields are required.");
+        if (!name || !email || !password || !confirmPassword) {
+          setError("All fields are required.");
           return false;
         }
-
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         if (!emailRegex.test(email)) {
-            setError("Please enter a valid email address.");
+          setError("Please enter a valid email address.");
+          return false;
+        }
+    
+        if (password !== confirmPassword) {
+          setError("Passwords do not match.");
           return false;
         }
     
@@ -27,14 +33,23 @@ const Login = ({ navigation }: { navigation: any }) => {
       };
 
     const login = async () => {
+        const result = await onLogin!(email, password);
+        if (result && result.error) {
+            alert(result.msg);
+        }
+    };
+
+    const register = async () => { 
         if (validateForm()) {
-            const result = await onLogin!(email, password);
+            const result = await onRegister!(name, email, password);
             if (result && result.error) {
-                alert('Wrong credentials!');
+                alert(result.msg);
+            } 
+            else {
+                login();
             }
         }
-        
-    };
+    }
 
     return (
         <View style={styles.container}>
@@ -43,7 +58,15 @@ const Login = ({ navigation }: { navigation: any }) => {
             <View style={styles.form}>
                 <TextInput
                     style={styles.input}
-                    placeholder='Email'
+                    placeholder='Full Name'
+                    onChangeText={(text: string) => setName(text)}
+                    value={name}
+                    autoComplete='off'
+                    autoCorrect={false}
+                ></TextInput>
+                <TextInput
+                    style={styles.input}
+                    placeholder='Email' 
                     onChangeText={(text: string) => setEmail(text)}
                     value={email}
                     autoCapitalize='none'
@@ -60,8 +83,17 @@ const Login = ({ navigation }: { navigation: any }) => {
                     autoComplete='off'
                     autoCorrect={false}
                 ></TextInput>
-                <PrimaryButton onPress={login} title="Sign In"></PrimaryButton>
-                <Button onPress={() => navigation.navigate('Register')} title="Create Account..."></Button>
+                <TextInput
+                    style={styles.input}
+                    placeholder='Confirm Password'
+                    secureTextEntry={true}
+                    onChangeText={(text: string) => setConfirmPassword(text)}
+                    value={confirmPassword}
+                    autoCapitalize='none'
+                    autoComplete='off'
+                    autoCorrect={false}
+                ></TextInput>
+                <PrimaryButton onPress={register} title="Create Account"></PrimaryButton>
             </View>
         </View>
     );
@@ -96,4 +128,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Login;
+export default Register;
