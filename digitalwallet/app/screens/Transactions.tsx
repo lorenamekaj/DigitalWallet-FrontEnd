@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Modal, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../context/AuthContext';
+import { Ionicons } from '@expo/vector-icons';
 
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
@@ -79,12 +80,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    header: {
-        fontSize: 24,
-        fontWeight: '600',
-        marginBottom: 20,
-        textAlign: 'center',
-    },
     transactionItem: {
         padding: 15,
         marginVertical: 10,
@@ -99,8 +94,8 @@ const styles = StyleSheet.create({
     },
     boldText: {
         fontWeight: 'bold',
-        marginBottom: 5,
-    },
+    }
 });
+
 
 export default Transactions;

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { API_URL, useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import PrimaryButton from '../ common/PrimaryButton';
+import PrimaryButton from '../common/PrimaryButton';
 
 const Register = ({ navigation }: { navigation: any }) => {
     const [email, setEmail] = useState('');
