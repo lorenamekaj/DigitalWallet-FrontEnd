@@ -7,6 +7,8 @@ import Home from './app/screens/Home';
 import Login from './app/screens/Login';
 import Register from './app/screens/Register';
 
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -29,7 +31,7 @@ export const Layout = () => {
             name="Home" 
             component={Home}
             options={{
-              headerRight: () => <Button onPress={onLogout} title="Sign Out" />, 
+              headerRight: () => <Button onPress={onLogout} title="Sign Out" />, headerShown: false
             }}
           ></Stack.Screen>
         ) : (
